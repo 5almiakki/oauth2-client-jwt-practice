@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import s5almiakki.oauth2clientjwtpractice.oauth2.CustomOAuth2SuccessHandler;
 import s5almiakki.oauth2clientjwtpractice.service.CustomOAuth2UserService;
 
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ import s5almiakki.oauth2clientjwtpractice.service.CustomOAuth2UserService;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -24,7 +26,8 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .oauth2Login(oAuth2Login -> oAuth2Login
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(customOAuth2UserService)))
+                                .userService(customOAuth2UserService))
+                        .successHandler(customOAuth2SuccessHandler))
                 .authorizeHttpRequests(httpRequest -> httpRequest
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated())
