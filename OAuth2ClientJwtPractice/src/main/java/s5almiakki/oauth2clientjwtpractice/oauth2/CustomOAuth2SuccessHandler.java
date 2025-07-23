@@ -33,7 +33,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .filter(cookie -> cookie.getName().equals(redirectUriParamName))
                 .map(Cookie::getValue)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("Redirect URI parameter not found"));
         allowedUris.validateRedirectUri(redirectUri);
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
         String username = user.getUsername();
