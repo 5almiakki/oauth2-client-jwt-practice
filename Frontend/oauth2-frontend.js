@@ -2,7 +2,7 @@ alert("JS loaded");
 
 function onClickNaverLoginButton() {
     alert("Naver login button clicked");
-    window.location.href = `http://localhost:8080/oauth2/authorization/naver?redirect-url=${location.protocol}//${location.host}`;
+    window.location.href = `http://localhost:8080/oauth2/authorization/naver?redirect-uri=${location.protocol}//${location.host}`;
 }
 
 function onClickGetDataButton() {
