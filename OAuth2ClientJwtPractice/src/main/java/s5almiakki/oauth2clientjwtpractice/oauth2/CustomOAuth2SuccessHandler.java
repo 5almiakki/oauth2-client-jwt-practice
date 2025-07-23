@@ -40,8 +40,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
     private void validateRedirectUri(String uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("Invalid redirect URI: " + uri);
+        }
         for (String allowedRedirectUri : allowedUris.getAllowedUris()) {
-            if (allowedRedirectUri.startsWith(uri)) {
+            if (uri.startsWith(allowedRedirectUri)) {
                 return;
             }
         }
