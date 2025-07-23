@@ -8,9 +8,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import s5almiakki.oauth2clientjwtpractice.jwt.JwtFilter;
 import s5almiakki.oauth2clientjwtpractice.oauth2.CustomOAuth2SuccessHandler;
 import s5almiakki.oauth2clientjwtpractice.service.CustomOAuth2UserService;
+
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -20,10 +24,22 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final JwtFilter jwtFilter;
+    private final AllowedUris allowedUris;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors
+                        .configurationSource(request -> {
+                            CorsConfiguration config = new CorsConfiguration();
+                            config.setAllowedOrigins(allowedUris.getAllowedUris());
+                            config.setAllowedMethods(Collections.singletonList("*"));
+                            config.setAllowCredentials(true);
+                            config.setAllowedHeaders(Collections.singletonList("*"));
+                            config.setMaxAge(3600L);
+                            config.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
+                            return config;
+                        }))
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
