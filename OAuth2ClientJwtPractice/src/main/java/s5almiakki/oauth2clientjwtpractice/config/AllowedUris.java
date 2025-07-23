@@ -1,15 +1,17 @@
-package s5almiakki.oauth2clientjwtpractice.oauth2;
+package s5almiakki.oauth2clientjwtpractice.config;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "custom.oauth2")
-public class AllowedRedirectUris {
+@ConfigurationProperties(prefix = "custom")
+public class AllowedUris {
 
-    private String[] allowedRedirectUris;
+    private List<String> allowedUris;
 }

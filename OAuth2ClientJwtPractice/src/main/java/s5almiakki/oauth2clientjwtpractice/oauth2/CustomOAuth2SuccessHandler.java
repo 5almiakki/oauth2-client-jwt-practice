@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import s5almiakki.oauth2clientjwtpractice.config.AllowedUris;
 import s5almiakki.oauth2clientjwtpractice.dto.CustomOAuth2User;
 import s5almiakki.oauth2clientjwtpractice.jwt.JwtUtils;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtUtils jwtUtils;
-    private final AllowedRedirectUris allowedRedirectUris;
+    private final AllowedUris allowedUris;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -39,7 +40,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
     private void validateRedirectUri(String uri) {
-        for (String allowedRedirectUri : allowedRedirectUris.getAllowedRedirectUris()) {
+        for (String allowedRedirectUri : allowedUris.getAllowedUris()) {
             if (allowedRedirectUri.startsWith(uri)) {
                 return;
             }
