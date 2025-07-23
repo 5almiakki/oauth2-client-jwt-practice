@@ -19,9 +19,12 @@ import java.io.IOException;
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtUtils jwtUtils;
+    private final AllowedRedirectUris allowedRedirectUris;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        String redirectUri = request.getParameter("redirect_uri");
+        validateRedirectUri(redirectUri);
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
         String username = user.getUsername();
         GrantedAuthority grantedAuthority = authentication.getAuthorities().iterator().next();
@@ -32,6 +35,15 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
-        response.sendRedirect();
+        response.sendRedirect(redirectUri);
+    }
+
+    private void validateRedirectUri(String uri) {
+        for (String allowedRedirectUri : allowedRedirectUris.getAllowedRedirectUris()) {
+            if (allowedRedirectUri.startsWith(uri)) {
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Invalid redirect URI: " + uri);
     }
 }
