@@ -30,4 +30,4 @@ spring:
 
 custom:
   oauth2:
-    redirect-uri-param-name: redirect-uri
+    redirect-uri-param-name: redirectUri
