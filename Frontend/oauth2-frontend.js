@@ -14,6 +14,7 @@ function onClickGetDataButton() {
             method: "GET",
             credentials: "include"
         })
+        .then((response) => response.json())
         .then((data) => {
             alert(data);
         })
