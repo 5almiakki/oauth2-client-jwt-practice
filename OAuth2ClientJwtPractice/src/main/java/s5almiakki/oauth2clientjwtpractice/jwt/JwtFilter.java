@@ -22,18 +22,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = null;
+        String accessToken = null;
         for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("Authorization")) {
-                jwt = cookie.getValue();
+            if (cookie.getName().equals("accessToken")) {
+                accessToken = cookie.getValue();
                 break;
             }
         }
-        if (jwt == null || jwtUtils.isExpired(jwt)) {
+        if (accessToken == null || jwtUtils.isExpired(accessToken)) {
             filterChain.doFilter(request, response);
             return;
         }
-        Authentication authentication = new UsernamePasswordAuthenticationToken(jwtUtils.getUsername(jwt), null, null);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(jwtUtils.getUsername(accessToken), null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
