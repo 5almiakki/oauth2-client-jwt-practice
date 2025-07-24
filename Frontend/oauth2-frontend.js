@@ -1,6 +1,6 @@
 alert("JS loaded");
 
-const REDIRECT_URI = `http://localhost:8080`;
+const REDIRECT_URI = window.location.href;
 
 function onClickNaverLoginButton() {
     alert("Naver login button clicked");
