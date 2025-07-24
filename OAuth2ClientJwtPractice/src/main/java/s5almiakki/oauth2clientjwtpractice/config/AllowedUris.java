@@ -19,6 +19,9 @@ public class AllowedUris {
     private List<String> allowedUris;
 
     public void validateRedirectUri(String uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("Missing redirect URI: " + uri);
+        }
         try {
             URI redirectUri = new URI(uri);
             for (String allowed : allowedUris) {
