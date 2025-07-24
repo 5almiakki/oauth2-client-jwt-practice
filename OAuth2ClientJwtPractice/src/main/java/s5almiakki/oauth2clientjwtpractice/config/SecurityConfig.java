@@ -9,8 +9,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.filter.CorsFilter;
 import s5almiakki.oauth2clientjwtpractice.jwt.JwtFilter;
 import s5almiakki.oauth2clientjwtpractice.oauth2.CustomOAuth2SuccessHandler;
+import s5almiakki.oauth2clientjwtpractice.oauth2.OAuth2RedirectUriCookieFilter;
 import s5almiakki.oauth2clientjwtpractice.service.CustomOAuth2UserService;
 
 import java.util.Collections;
@@ -24,6 +26,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final JwtFilter jwtFilter;
+    private final OAuth2RedirectUriCookieFilter oAuth2RedirectUriCookieFilter;
     private final AllowedUris allowedUris;
 
     @Bean
@@ -53,6 +56,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(oAuth2RedirectUriCookieFilter, CorsFilter.class)
                 .build();
     }
 }
